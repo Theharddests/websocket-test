@@ -2,28 +2,16 @@ import os
 from aiohttp import web, WSMsgType
 
 async def home(request):
-return web.json_response({
-"status": "online",
-"service": "WebSocket test",
-"websocket_path": "/ws"
-})
+return web.json_response({"status": "online", "service": "WebSocket test", "websocket_path": "/ws"})
 
 async def websocket_handler(request):
 ws = web.WebSocketResponse()
 await ws.prepare(request)
-
-await ws.send_json({
-    "status": "connected",
-    "message": "WebSocket fonctionne !"
-})
+await ws.send_json({"status": "connected", "message": "WebSocket fonctionne !"})
 
 async for msg in ws:
     if msg.type == WSMsgType.TEXT:
-        await ws.send_json({
-            "echo": msg.data
-        })
-    elif msg.type == WSMsgType.ERROR:
-        print("Erreur WebSocket :", ws.exception())
+        await ws.send_json({"echo": msg.data})
 
 return ws
 
